@@ -114,7 +114,7 @@ a:hover {
 
 .server {
 	background-color: var(--bg-color-light);
-	border: 1px solid var (--dim);
+	border: 1px solid var(--dim);
 	border-radius: 8px;
 	padding: 1em;
 	margin-bottom: 1.5em;
