@@ -11,8 +11,6 @@
 	--primary: #f5722c;
 	--secondary: #e23610;
 	--accent: #f0e62e;
-  /* --link: #ffda10;
-  --link-hover: #c3ff0f; */
   --dim: #ffffff50;
   --bg-color-light: #373736;
 }
@@ -55,15 +53,6 @@ ul {
 li {
 	margin-bottom: 0.5em;
 }
-
-/*
-code {
-  font-family: 'JetBrains Mono', monospace;
-  background-color: var(--dim);
-  padding: 0.1em 0.3em;
-  border-radius: 2px;
-}
-*/
 
 header {
   display: flex;
@@ -121,6 +110,44 @@ a:hover {
 .ps {
   font-size: 0.9em;
   color: var(--dim);
+}
+
+.server {
+	background-color: var(--bg-color-light);
+	border: 1px solid var (--dim);
+	border-radius: 8px;
+	padding: 1em;
+	margin-bottom: 1.5em;
+	transition: transform 0.1s ease;
+}
+
+.server h3 {
+	margin-top: 0;
+}
+
+.server iframe {
+	width: 100%;
+	max-width: 500px;
+	display: block;
+	margin: 0.5em 0;
+	border-radius: 6px;
+}
+
+.links {
+	display: flex;
+	gap: 1em;
+	flex-wrap: wrap;
+	margin-top: 0.5em;
+}
+
+.links a {
+	padding: 0.3em 0.6em;
+	background: var(--dim);
+	border-radius: 4px
+}
+
+.server:hover {
+  transform: translateY(-2px);
 }
 
 /* FLEXBOX */
