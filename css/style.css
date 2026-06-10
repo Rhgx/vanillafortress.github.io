@@ -11,9 +11,10 @@
 	--primary: #f5722c;
 	--secondary: #e23610;
 	--accent: #733c3f;
-  --link: #ffda10;
-  --link-hover: #c3ff0f;
+  /* --link: #ffda10;
+  --link-hover: #c3ff0f; */
   --dim: #ffffff50;
+  --bg-color-light: #525250;
 }
 
 /* BASE STYLES */
@@ -28,7 +29,7 @@ body {
 }
 
 header, footer {
-	background-color: var(--secondary);
+	background-color: var(--bg-color-light);
 	/* text-align: center; */
 	font-size: 14px;
 	padding: 1em;
@@ -80,7 +81,7 @@ nav a {
 /* INTERACTIVE ELEMENTS */
 
 button {
-	background-color: var(--secondary);
+	background-color: var(--accent);
 	color: var(--text-color);
 	border: none;
 	padding: 0.5em 1em;
@@ -88,17 +89,17 @@ button {
 }
 
 button:hover {
-	background-color: var(--accent);
+	background-color: var(--primary);
 	cursor: pointer;
 }
 
 a {
-	color: var(--link);
+	color: var(--accent);
 	text-decoration: none;
 }
 
 a:hover {
-	color: var(--link-hover);
+	color: var(--primary);
 }
 
 /* CLASSES */
