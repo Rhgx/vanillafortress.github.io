@@ -95,6 +95,11 @@ a:hover {
 
 /* CLASSES */
 
+.logo {
+  height: 450px
+  width: auto
+}
+
 .left-align {
   text-align: left;
 }
