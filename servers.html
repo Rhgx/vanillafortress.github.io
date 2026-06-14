@@ -31,7 +31,8 @@ script: /js/copy_ip.js
       <h2 class="mid-align">Europe</h2>
 
       {% for s in site.data.servers.eu %}
-        {% include server_card.html s=s connect="steam://connect/" | append: s.ip %}
+        {% assign connect_url = "steam://connect/" | append: s.ip %}
+        {% include server_card.html s=s connect=connect_url %}
       {% endfor %}
 
     </div>
@@ -40,7 +41,8 @@ script: /js/copy_ip.js
       <h2 class="mid-align">North America</h2>
 
       {% for s in site.data.servers.na %}
-        {% include server_card.html s=s connect="steam://connect/" | append: s.ip %}
+        {% assign connect_url = "steam://connect/" | append: s.ip %}
+        {% include server_card.html s=s connect=connect_url %}
       {% endfor %}
 
     </div>
