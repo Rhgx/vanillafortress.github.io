@@ -40,5 +40,5 @@ na:
   - name: TF2 Warhouse
     region: na
     id: 38847880
-    ip: 50.20.251.219.9135
+    ip: 50.20.251.219:9135
     steam: https://steamcommunity.com/groups/thewarhousegroup
