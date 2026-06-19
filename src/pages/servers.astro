@@ -1,4 +1,78 @@
 ---
-import servers from "../data/servers.yaml";
 import Layout from "../layouts/default.astro";
+import ServerCard from "../components/server_card.astro";
+import servers from "../data/servers.yaml";
+
+type Server = {
+  name: string;
+  id: number;
+  ip: string;
+  steam?: string;
+  discord?: string;
+  website?: string;
+}
+
+const server_data = servers as {
+  eu: Server[];
+  na: Server[];
+};
+
 ---
+
+<Layout
+  title="Server List - VFTF"
+  description="Vanilla Fortress Server List">
+
+<script src="../scripts/copy-ip.js"></script>
+<script is:inline>
+  // please do not ask why this is here instead of in a script file
+  // i simply ctrl+c ctrl+v'd this from battlemetrics
+  
+  window.addEventListener('message',function(e) {
+  if(e.data.uid && e.data.type === 'sizeUpdate') {
+    var i = document.querySelector('iframe[name="'+e.data.uid+'"]');
+    i.style.width = e.data.payload.width;
+    i.style.height = e.data.payload.height;
+  }
+  });
+</script>
+
+<div class="mid-align">
+
+  <h1>Servers</h1>
+  <p>You can find our list of officially endorsed servers here.</p>
+
+</div>
+
+<div class="server-grid">
+
+  <div class="eu-servers">
+
+    <h2>Europe</h2>
+
+    {server_data.eu.map((server) => (
+
+      <ServerCard
+        server={server}
+        connect={`steam://connect/${server.ip}`}/>
+        
+    ))}
+
+  </div>
+
+  <div class="na-servers">
+    <h2>North America</h2>
+
+    {server_data.na.map((server) => (
+
+      <ServerCard
+        server={server}
+        connect={`steam://connect/${server.ip}`}/>
+        
+    ))}
+
+  </div>
+
+</div>
+
+</Layout>

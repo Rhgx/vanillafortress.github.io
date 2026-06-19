@@ -1,0 +1,25 @@
+---
+const colors = {
+  "foreground": "fdf9cd",
+  "background": "373736",
+  "lines": "e23610",
+  "link_color": "f5722c",
+  "graph_color": "f0e62e",
+};
+
+const { id } = Astro.props;
+
+const battlemetrics_link = // prepare for some string concatenation tomfoolery
+  `https://cdn.battlemetrics.com/b/horizontal500x80px/${id}.html` +
+  `?foreground=%23${colors.foreground}` +
+  `&background=%23${colors.background}` +
+  `&lines=%23${colors.lines}` +
+  `&linkColor=%23${colors.link_color}` +
+  `&chartColor=%23${colors.graph_color}`;
+---
+
+<iframe
+  src={battlemetrics_link}
+  frameborder="0"
+  style="border:0"
+  name={id}></iframe>

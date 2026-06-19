@@ -1,0 +1,37 @@
+---
+import ServerIframe from "./server_iframe.astro";
+
+const { server, connect } = Astro.props;
+---
+
+<div class="server">
+  <h3>{server.name}</h3>
+
+  <ServerIframe id={server.id} />
+
+  <div class="links">
+
+    <a href={connect} class="btn-connect">Connect</a>
+
+    <a
+      href="#"
+      class="copy-ip"
+      data-copy={server.ip}>
+    Copy IP
+    </a>
+
+    {server.discord && (
+      <a href={server.discord}>Discord Server</a>
+    )}
+
+    {server.steam && (
+      <a href={server.steam}>Steam Group</a>
+    )}
+
+    {server.website && (
+      <a href={server.website}>Website</a>
+    )}
+
+  </div>
+
+</div>
