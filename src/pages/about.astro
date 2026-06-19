@@ -1,0 +1,41 @@
+---
+import Layout from "../layouts/default.astro";
+import faq from "../data/faq.yaml";
+
+type FAQ = { // wallahi typescript be stricter than rust
+  question: string;
+  answer: string;
+}
+
+const questions: FAQ[] = faq;
+
+---
+
+<Layout
+  title="About - VFTF"
+  description="About Vanilla Fortress">
+
+<div class="mid-align">
+  <h1>About</h1>
+
+  <p>
+    Vanilla Fortress is a community hub for finding and seeding vanilla TF2 servers
+    running the original Quickplay era ruleset.
+  </p>
+
+</div>
+
+<h1>FAQ</h1>
+
+{questions.map((q) => ( // this some ts soup over here
+
+  <div class="question">
+
+    <h2>{q.question}</h2>
+    <p>{q.answer}</p>
+
+  </div>
+
+))}
+
+</Layout>

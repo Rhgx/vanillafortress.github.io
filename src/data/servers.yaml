@@ -1,0 +1,50 @@
+eu:
+  - name: BBQ Party
+    id: 39230336
+    ip: 79.76.47.29:27015
+    steam: https://steamcommunity.com/groups/BBQ_Partygoers 
+    discord: https://discord.gg/h3wker9tfF
+
+  - name: Pipeline.tf (EU)
+    id: 38185353
+    ip: 170.23.138.191:22208
+    steam: https://steamcommunity.com/groups/plr_pipeline
+    discord: https://discord.gg/YYU6qhkeV
+  
+  - name: Zesty's (EU)
+    id: 39474491
+    ip: 185.107.96.14:27015
+    website: https://zestyjesus.com
+
+na:
+  - name: Pipeline.tf (NA)
+    id: 38102671
+    ip: 170.23.69.133:22402
+    steam: https://steamcommunity.com/groups/plr_pipeline
+    discord: https://discord.gg/YYU6qhkeV
+  
+  - name: Agartha.tf
+    id: 39427342
+    ip: agartha.gamergod.net:22133
+    steam: https://steamcommunity.com/groups/agarthalives/
+    website: https://agartha.tf
+  
+  #- name: Zesty's (NA)
+  #  id: 
+  #  ip: 74.91.122.3:27015
+  #  website: https://zestyjesus.com
+
+  - name: Teepawtz.tf
+    id: 37100662
+    ip: teapot.ggwp.cc:22189
+    steam: https://steamcommunity.com/groups/Teepawt
+  
+  - name: Fight Club Night
+    id: 38674597
+    ip: 204.12.240.189:27015
+    steam: https://steamcommunity.com/groups/FightClubNight
+  
+  - name: TF2 Warhouse
+    id: 38847880
+    ip: 50.20.251.219:9135
+    steam: https://steamcommunity.com/groups/thewarhousegroup

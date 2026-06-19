@@ -25,6 +25,10 @@ body {
   font-size: 16px;
   margin: 0;
   padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
 header,
@@ -181,19 +185,6 @@ a {
 }
 
 // FLEX
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-}
 
 main {
   flex: 1;
