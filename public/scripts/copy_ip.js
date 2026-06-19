@@ -25,3 +25,6 @@ document.addEventListener("DOMContentLoaded", () => { // WHY THE FUCK IS IT SO N
     })
   })
 }) // THIS FILE HAS TWELVE CURLY BRACES
+
+// i know past spark. it does indeed have 12 {}s.
+// but im not porting this unholy file to typescript. continue suffering.

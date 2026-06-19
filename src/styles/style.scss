@@ -25,6 +25,10 @@ body {
   font-size: 16px;
   margin: 0;
   padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
 header,
@@ -147,7 +151,8 @@ a {
 .links {
   font-weight: 400;
 
-  > a {
+  > a,
+  > button {
     display: inline-block;
     padding: 0.3em 0.6em;
     background: $primary;
@@ -156,6 +161,10 @@ a {
     text-decoration: none;
     transition: 0.15s ease;
     border: 1px solid transparent;
+
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
 
     &:hover {
       background: $secondary;
@@ -181,19 +190,6 @@ a {
 }
 
 // FLEX
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-}
 
 main {
   flex: 1;
