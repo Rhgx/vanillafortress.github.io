@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => { // WHY THE FUCK IS IT SO N
       e.preventDefault();
       
       const text = "connect " + btn.dataset.copy;
-      if (!text) return;
+      if (!btn.dataset.copy) return;
 
       try {
         await navigator.clipboard.writeText(text);
