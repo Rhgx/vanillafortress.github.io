@@ -7,7 +7,7 @@ const colors = {
   "graph_color": "f0e62e",
 };
 
-const { id } = Astro.props;
+const { name, id } = Astro.props;
 
 const battlemetrics_link = // prepare for some string concatenation tomfoolery
   `https://cdn.battlemetrics.com/b/horizontal500x80px/${id}.html` +
@@ -21,4 +21,5 @@ const battlemetrics_link = // prepare for some string concatenation tomfoolery
 <iframe
   src={battlemetrics_link}
   style="border:0"
-  name={id}></iframe>
+  name={id}
+  title={name}></iframe>

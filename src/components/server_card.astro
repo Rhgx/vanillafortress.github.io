@@ -1,13 +1,14 @@
 ---
 import ServerIframe from "./server_iframe.astro";
 
-const { server, connect } = Astro.props;
+const { server } = Astro.props;
+const connect = `connect ${server.ip}`;
 ---
 
 <div class="server">
   <h3>{server.name}</h3>
 
-  <ServerIframe id={server.id} />
+  <ServerIframe id={server.id} name={server.name}/>
 
   <div class="links">
 
