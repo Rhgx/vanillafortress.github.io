@@ -1,0 +1,100 @@
+// IMPORTS
+
+@use './colors';
+
+// CLASSES
+
+.logo {
+  height: 80px;
+  width: 80px;
+}
+
+.left-align {
+  text-align: left;
+}
+
+.mid-align {
+  text-align: center;
+}
+
+.right-align {
+  text-align: right;
+}
+
+.ps {
+  font-size: 0.9em;
+  color: colors.$dim;
+}
+
+.server {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  background-color: colors.$secondary-bg;
+  border: 1px solid colors.$dim;
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 1.5em;
+  transition: transform 0.1s ease;
+
+  > h3 {
+    margin-top: 0;
+  }
+
+  > iframe {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    margin: 0.5em 0;
+    border-radius: 6px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.server-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  align-items: start;
+}
+
+.links {
+  font-weight: 400;
+
+  > a,
+  > button {
+    display: inline-block;
+    padding: 0.3em 0.6em;
+    background: colors.$primary;
+    color: colors.$text-color;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: 0.1s ease;
+    border: 1px solid transparent;
+
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+
+    &:hover {
+      background: colors.$secondary;
+      color: colors.$text-color;
+      transform: translateY(-2px);
+      border-color: colors.$accent;
+    }
+  }
+}
+
+.link-icons {
+  > a {
+    padding: 0.35em;
+
+    > img {
+      height: 30px;
+      width: 30px;
+    }
+  }
+}
