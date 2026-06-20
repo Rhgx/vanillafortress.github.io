@@ -1,4 +1,5 @@
 ---
+import ExternalLink from "../components/external_link.astro";
 import Layout from "../layouts/default.astro";
 import socials from "../data/socials.yaml";
 ---
@@ -25,8 +26,8 @@ import socials from "../data/socials.yaml";
   <h1>Get Fragging</h1>
 
   <div class="links">
-    <a href={socials.discord}>Discord Server</a>
-    <a href={socials.steam}>Steam Group</a>
+    <ExternalLink href={socials.discord}>Discord Server</ExternalLink>
+    <ExternalLink href={socials.steam}>Steam Group</ExternalLink>
   </div>
 
 </div>

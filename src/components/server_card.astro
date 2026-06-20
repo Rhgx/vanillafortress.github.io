@@ -1,4 +1,5 @@
 ---
+import ExternalLink from "./external_link.astro";
 import ServerIframe from "./server_iframe.astro";
 
 const { server } = Astro.props;
@@ -22,15 +23,15 @@ const connect = `connect ${server.ip}`;
     </button>
 
     {server.discord && (
-      <a href={server.discord}>Discord Server</a>
+      <ExternalLink href={server.discord}>Discord Server</ExternalLink>
     )}
 
     {server.steam && (
-      <a href={server.steam}>Steam Group</a>
+      <ExternalLink href={server.steam}>Steam Group</ExternalLink>
     )}
 
     {server.website && (
-      <a href={server.website}>Website</a>
+      <ExternalLink href={server.website}>Website</ExternalLink>
     )}
 
   </div>

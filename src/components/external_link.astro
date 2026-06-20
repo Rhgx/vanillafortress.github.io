@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"a"> & {
+  href: string;
+};
+
+const { href, rel, target = "_blank", ...attrs } = Astro.props;
+const relTokens = new Set((rel ?? "").split(/\s+/).filter(Boolean));
+
+relTokens.add("noopener");
+relTokens.add("noreferrer");
+---
+
+<a {...attrs} href={href} target={target} rel={[...relTokens].join(" ")}>
+  <slot />
+  {target === "_blank" && (
+    <span class="visually-hidden"> (opens in a new tab)</span>
+  )}
+</a>
