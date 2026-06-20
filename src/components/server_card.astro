@@ -2,8 +2,7 @@
 import ExternalLink from "./external_link.astro";
 import ServerIframe from "./server_iframe.astro";
 
-const { server } = Astro.props;
-const connect = `connect ${server.ip}`;
+const { server, connect } = Astro.props;
 ---
 
 <div class="server">

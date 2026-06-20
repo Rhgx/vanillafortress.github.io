@@ -12,9 +12,9 @@ relTokens.add("noopener");
 relTokens.add("noreferrer");
 ---
 
-<a {...attrs} href={href} target={target} rel={[...relTokens].join(" ")}>
-  <slot />
-  {target === "_blank" && (
-    <span class="visually-hidden"> (opens in a new tab)</span>
-  )}
-</a>
+<a
+  {...attrs}
+  href={href}
+  target={target}
+  rel={[...relTokens].join(" ")}
+><slot />{target === "_blank" && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
