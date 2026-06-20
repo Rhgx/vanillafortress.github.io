@@ -131,8 +131,14 @@ $graph: #d9bc55;
     background: #44413d;
     border: 1px solid rgba(colors.$text-color, 0.14);
     border-radius: 4px;
+    box-shadow: 0 3px 0 #292725;
     font: 700 0.82rem/1 fonts.$inter;
     cursor: pointer;
+    transition:
+      color 160ms ease,
+      background-color 160ms ease,
+      border-color 160ms ease,
+      box-shadow 160ms ease;
 
     &:hover,
     &:focus-visible {
@@ -145,6 +151,7 @@ $graph: #d9bc55;
       color: #231f1b;
       background: colors.$primary;
       border-color: rgba(colors.$text-color, 0.2);
+      box-shadow: 0 3px 0 #9b3f20;
     }
 
     > span {

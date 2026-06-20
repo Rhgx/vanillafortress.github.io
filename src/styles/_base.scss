@@ -39,27 +39,76 @@ h3 {
   text-transform: uppercase;
 }
 
-header {
+.site-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1.5rem;
   padding: 1em 1.3em;
+  border-bottom: 1px solid rgba(colors.$text-color, 0.18);
 }
 
-nav {
-  padding: 0.5em;
-  font-size: 16px;
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0;
+  font-size: 1rem;
 
   > a {
-    font-weight: bold;
+    box-sizing: border-box;
+    min-height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.65rem;
+    color: colors.$text-color;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-weight: 800;
+
+    &:hover,
+    &:focus-visible {
+      color: colors.$primary;
+      background: rgba(colors.$text-color, 0.05);
+      border-color: rgba(colors.$text-color, 0.16);
+    }
+
+    &[aria-current="page"] {
+      color: colors.$primary;
+      border-color: rgba(colors.$text-color, 0.12);
+    }
   }
 }
 
 a {
-  color: colors.$secondary;
+  color: colors.$primary;
   text-decoration: none;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease;
 
-  &:hover {
-    color: colors.$primary;
+  &:hover,
+  &:focus-visible {
+    color: colors.$accent;
+  }
+}
+
+@media (max-width: 520px) {
+  .site-header {
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+  }
+
+  .site-nav {
+    gap: 0.2rem;
+
+    > a {
+      min-height: 2.25rem;
+      padding: 0.4rem 0.5rem;
+      font-size: 0.9rem;
+    }
   }
 }
