@@ -19,6 +19,8 @@ const socialLinks = [
     icon: "/images/icons/github.svg",
   },
 ];
+
+const currentYear = new Date().getFullYear();
 ---
 
 <footer>
@@ -26,12 +28,10 @@ const socialLinks = [
   <div class="mid-align">
 
     <p class="attribution">
-      Website made by 
-      <ExternalLink href={socials.spark}>_Spark,</ExternalLink>
-      <ExternalLink href={socials.rocks}>Rocks,</ExternalLink>
-      and 
+      Created by <ExternalLink href={socials.spark}>_Spark</ExternalLink>,
+      <ExternalLink href={socials.rocks}>Rocks</ExternalLink>, and
       <ExternalLink href={socials.tored}>Tored</ExternalLink>
-      with help from people in the VFTF Discord.
+      with support from the VFTF Discord community.
     </p>
 
     <nav class="link-icons" aria-label="Community links">
@@ -41,22 +41,19 @@ const socialLinks = [
           aria-label={`${link.label} (opens in a new tab)`}
           data-tooltip={link.label}
         >
-          <img
-            src={link.icon}
-            alt=""
-            width="18"
-            height="18"
-            loading="lazy"
-            decoding="async"
-          />
+          <span
+            class="link-icon"
+            style={`--icon: url("${link.icon}")`}
+            aria-hidden="true"
+          ></span>
         </ExternalLink>
       ))}
     </nav>
 
-    <div class="legal-notice">
-      <p>Vanilla Fortress is not in any way affiliated with Valve Corporation. or the TF Team.</p>
-      <p>Team Fortress 2 and all related content are property of Valve Corporation.</p>
-    </div>
+    <p class="legal-notice">
+      &copy; {currentYear} Vanilla Fortress. Not affiliated with Valve or the TF Team.
+      Team Fortress 2 and related content are property of Valve Corporation.
+    </p>
 
   </div>
 
