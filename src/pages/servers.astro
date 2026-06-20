@@ -1,21 +1,10 @@
 ---
 import Layout from "../layouts/default.astro";
 import ServerCard from "../components/server_card.astro";
-import servers from "../data/servers.yaml";
+import { getServersByRegion } from "../data/servers";
 
-type Server = {
-  name: string;
-  id: number;
-  ip: string;
-  steam?: string;
-  discord?: string;
-  website?: string;
-};
-
-const server_data = servers as {
-  eu: Server[];
-  na: Server[];
-};
+const euServers = getServersByRegion("eu");
+const naServers = getServersByRegion("na");
 
 ---
 
@@ -50,7 +39,7 @@ const server_data = servers as {
 
     <h2 class="mid-align">Europe</h2>
 
-    {server_data.eu.map((server) => (
+    {euServers.map((server) => (
 
       <ServerCard
         server={server}
@@ -63,7 +52,7 @@ const server_data = servers as {
   <div class="na-servers">
     <h2 class="mid-align">North America</h2>
 
-    {server_data.na.map((server) => (
+    {naServers.map((server) => (
 
       <ServerCard
         server={server}
