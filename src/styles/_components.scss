@@ -44,7 +44,7 @@
   line-height: 1.45;
 }
 
-.server {
+.server-card {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
@@ -55,21 +55,91 @@
   margin-bottom: 1.5em;
   transition: transform 0.1s ease;
 
-  > h3 {
+  h3 {
     margin-top: 0;
-  }
-
-  > iframe {
-    width: 100%;
-    max-width: 500px;
-    display: block;
-    margin: 0.5em 0;
-    border-radius: 6px;
   }
 
   &:hover {
     transform: translateY(-2px);
   }
+}
+
+.server-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+
+  > h3 {
+    margin-bottom: 0;
+  }
+}
+
+.server-card-content {
+  display: grid;
+  gap: 0.65em;
+}
+
+.server-status,
+.server-identity,
+.server-details,
+.server-community-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.server-status {
+  color: colors.$dim;
+  text-transform: uppercase;
+}
+
+.server-status-dot {
+  width: 0.55em;
+  height: 0.55em;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.server-card[data-status="online"] .server-status {
+  color: #6fbd5d;
+}
+
+.country-flag {
+  width: 1.75em;
+  aspect-ratio: 7 / 5;
+  flex: 0 0 auto;
+  background-position: center;
+  background-size: cover;
+  border-radius: 2px;
+}
+
+.server-map,
+.server-details,
+.server-history > span {
+  color: colors.$dim;
+}
+
+.server-map {
+  min-height: 1em;
+}
+
+.server-history {
+  display: grid;
+  gap: 0.35em;
+
+  > canvas {
+    width: 100%;
+    height: 92px;
+    display: block;
+    background: rgba(colors.$bg-color, 0.35);
+    border: 1px solid colors.$dim;
+    border-radius: 4px;
+  }
+}
+
+.server-community-links {
+  flex-wrap: wrap;
 }
 
 .server-grid {

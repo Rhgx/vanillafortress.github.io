@@ -28,6 +28,7 @@ const resolveServer = (
 
   return {
     ...definition,
+    countryOverride,
     ...links,
     community,
     id: battlemetrics.id,

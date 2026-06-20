@@ -1,39 +1,79 @@
 ---
 import ExternalLink from "./external_link.astro";
-import ServerIframe from "./server_iframe.astro";
+import type { Server } from "../data/servers";
 
-const { server } = Astro.props;
-const connect = `connect ${server.ip}`;
+type Props = {
+  server: Server;
+  connect: string;
+};
+
+const { server, connect } = Astro.props;
+const country = server.country?.toLowerCase();
+const flagStyle = country
+  ? `background-image: url("https://flagcdn.com/${country}.svg")`
+  : undefined;
 ---
 
-<div class="server">
-  <h3>{server.name}</h3>
+<article
+  class="server-card"
+  data-server-id={server.id}
+  data-country-override={server.countryOverride}
+  data-status="loading"
+>
+  <header class="server-card-header">
+    <h3>{server.community}</h3>
+    <code class="server-address">{server.ip}</code>
+  </header>
 
-  <ServerIframe id={server.id} name={server.name}/>
+  <div class="server-card-content" aria-live="polite">
+    <div class="server-status">
+      <span class="server-status-dot" aria-hidden="true"></span>
+      <span data-status-text>Checking</span>
+    </div>
 
-  <div class="links">
+    <div class="server-identity">
+      <span
+        class="country-flag"
+        data-country-flag
+        style={flagStyle}
+        role={country ? "img" : undefined}
+        aria-label={country?.toUpperCase()}
+        aria-hidden={country ? undefined : "true"}
+      ></span>
+      <strong data-players>--/--</strong>
+      <span data-server-name>{server.name}</span>
+    </div>
 
-    <a href={connect} class="btn-connect">Connect</a>
+    <span class="server-map" data-map></span>
 
-    <button
-      type="button"
-      class="copy-ip"
-      data-copy={server.ip}>
-    Copy IP
-    </button>
+    <div class="server-details">
+      <span><strong data-rank>--</strong> rank</span>
+      <span><strong data-player-summary>--/--</strong> players</span>
+    </div>
 
-    {server.discord && (
-      <ExternalLink href={server.discord}>Discord Server</ExternalLink>
+    <div class="server-history" data-history-panel>
+      <span>Players 24h</span>
+      <canvas
+        data-history-graph
+        width="360"
+        height="92"
+        aria-label="Player count over the past 24 hours"
+      ></canvas>
+    </div>
+
+    <div class="links server-card-actions">
+      <a href={connect} class="btn-connect">Connect</a>
+      <button type="button" class="copy-ip" data-copy={server.ip}>
+        <span data-copy-label>Copy IP</span>
+      </button>
+    </div>
+
+    {(server.discord || server.steam || server.website) && (
+      <nav class="server-community-links" aria-label={`${server.community} links`}>
+        {server.discord && <ExternalLink href={server.discord}>Discord</ExternalLink>}
+        {server.steam && <ExternalLink href={server.steam}>Steam Group</ExternalLink>}
+        {server.website && <ExternalLink href={server.website}>Website</ExternalLink>}
+      </nav>
     )}
-
-    {server.steam && (
-      <ExternalLink href={server.steam}>Steam Group</ExternalLink>
-    )}
-
-    {server.website && (
-      <ExternalLink href={server.website}>Website</ExternalLink>
-    )}
-
   </div>
-
-</div>
+</article>
