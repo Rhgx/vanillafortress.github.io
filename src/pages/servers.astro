@@ -2,6 +2,8 @@
 import Layout from "../layouts/default.astro";
 import ExternalLink from "../components/external_link.astro";
 import ServerCard from "../components/server_card.astro";
+import discordIcon from "../assets/icons/discord.svg?url";
+import steamIcon from "../assets/icons/steam.svg?url";
 import { serverRegions } from "../data/servers";
 import clearIcon from "lucide-static/icons/x.svg?url";
 import websiteIcon from "lucide-static/icons/globe.svg?url";
@@ -81,7 +83,7 @@ const serverCount = serverRegions.reduce(
                       aria-label={`${group.name} Discord`}
                       data-tooltip="Discord"
                     >
-                      <span class="server-group-link-icon" style="--icon: url('/images/icons/discord.svg')" aria-hidden="true"></span>
+                      <span class="server-group-link-icon" style={`--icon: url("${discordIcon}")`} aria-hidden="true"></span>
                     </ExternalLink>
                   )}
                   {group.links.website && (
@@ -99,7 +101,7 @@ const serverCount = serverRegions.reduce(
                       aria-label={`${group.name} Steam group`}
                       data-tooltip="Steam Group"
                     >
-                      <span class="server-group-link-icon" style="--icon: url('/images/icons/steam.svg')" aria-hidden="true"></span>
+                      <span class="server-group-link-icon" style={`--icon: url("${steamIcon}")`} aria-hidden="true"></span>
                     </ExternalLink>
                   )}
                 </nav>

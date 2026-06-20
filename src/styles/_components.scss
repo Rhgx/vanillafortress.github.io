@@ -1,5 +1,6 @@
 // IMPORTS
 
+@use 'sass:color';
 @use './colors';
 @use './fonts';
 
@@ -84,10 +85,10 @@
     gap: 0.4375rem;
     padding: 0.5625rem 0.8125rem;
     color: colors.$text-color;
-    background: #d9652f;
+    background: colors.$primary;
     border: 1px solid rgba(colors.$text-color, 0.24);
     border-radius: 4px;
-    box-shadow: 0 3px 0 #7c2f1f;
+    box-shadow: 0 3px 0 color.adjust(colors.$primary, $lightness: -25%);
     text-decoration: none;
     font: 900 0.92rem/1 fonts.$nunito;
     cursor: pointer;
@@ -99,7 +100,7 @@
 
     &:hover,
     &:focus-visible {
-      background: #f27a35;
+      background: color.adjust(colors.$primary, $lightness: 6%);
       color: colors.$text-color;
       border-color: colors.$accent;
     }

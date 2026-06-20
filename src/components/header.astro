@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import logo from "../assets/vftf/transparent/logo.png";
+
 const currentPath = Astro.url.pathname;
 const navigation = [
   { href: "/", label: "Home" },
@@ -13,10 +16,15 @@ const isCurrentPage = (href: string) =>
 <header class="site-header">
 
   <a href="/" class="brand" aria-label="Vanilla Fortress home">
-    <img
-      src="/images/vftf/transparent/logo.png"
+    <Image
+      src={logo}
       class="logo"
-      alt="">
+      alt=""
+      width={80}
+      height={80}
+      loading="eager"
+      decoding="async"
+    />
   </a>
 
   <nav class="site-nav" aria-label="Primary navigation">
