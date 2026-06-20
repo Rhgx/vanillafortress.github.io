@@ -1,13 +1,17 @@
+// IMPORTS
+
+@use './fonts';
+@use './colors';
+
 // STYLES
 
 body {
-  background-color: $bg-color;
-  color: $text-color;
-  font-family: $inter;
+  background-color: colors.$bg-color;
+  color: colors.$text-color;
+  font-family: fonts.$inter;
   font-size: 16px;
   margin: 0;
   padding: 0;
-  height: 100%;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -15,7 +19,7 @@ body {
 
 header,
 footer {
-  background-color: $secondary-bg;
+  background-color: colors.$secondary-bg;
   font-size: 14px;
   padding: 1em;
   font-weight: 700;
@@ -23,24 +27,16 @@ footer {
 
 main {
   padding: 2em;
+  flex: 1;
 }
 
 h1,
 h2,
 h3 {
-  color: $primary;
-  font-family: $ubuntu;
+  color: colors.$primary;
+  font-family: fonts.$ubuntu;
   font-weight: 700;
   text-transform: uppercase;
-}
-
-ul {
-  padding: 1em;
-  list-style-type: circle;
-}
-
-li {
-  margin-bottom: 0.5em;
 }
 
 header {
@@ -60,10 +56,10 @@ nav {
 }
 
 a {
-  color: $secondary;
+  color: colors.$secondary;
   text-decoration: none;
 
   &:hover {
-    color: $primary;
+    color: colors.$primary;
   }
 }

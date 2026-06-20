@@ -1,11 +1,4 @@
-// FONTS & COLORS
-@use './variables';
+// PARTIALS
 
-// STYLES
-@use './base';
-
-// CLASSES
 @use './components';
-
-// FLEX
-@use './layout';
+@use './base';

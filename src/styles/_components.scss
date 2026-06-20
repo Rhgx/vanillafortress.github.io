@@ -1,3 +1,7 @@
+// IMPORTS
+
+@use './colors';
+
 // CLASSES
 
 .logo {
@@ -19,15 +23,15 @@
 
 .ps {
   font-size: 0.9em;
-  color: $dim;
+  color: colors.$dim;
 }
 
 .server {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  background-color: $secondary-bg;
-  border: 1px solid $dim;
+  background-color: colors.$secondary-bg;
+  border: 1px solid colors.$dim;
   border-radius: 8px;
   padding: 1em;
   margin-bottom: 1.5em;
@@ -64,11 +68,11 @@
   > button {
     display: inline-block;
     padding: 0.3em 0.6em;
-    background: $primary;
-    color: $text-color;
+    background: colors.$primary;
+    color: colors.$text-color;
     border-radius: 4px;
     text-decoration: none;
-    transition: 0.15s ease;
+    transition: 0.1s ease;
     border: 1px solid transparent;
 
     font-family: inherit;
@@ -76,10 +80,10 @@
     cursor: pointer;
 
     &:hover {
-      background: $secondary;
-      color: $text-color;
-      transform: translateY(-1px);
-      border-color: $accent;
+      background: colors.$secondary;
+      color: colors.$text-color;
+      transform: translateY(-2px);
+      border-color: colors.$accent;
     }
   }
 }
