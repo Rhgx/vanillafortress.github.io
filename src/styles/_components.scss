@@ -67,11 +67,6 @@
       background: rgba(colors.$text-color, 0.05);
       border-color: rgba(colors.$text-color, 0.16);
     }
-
-    &[aria-current="page"] {
-      color: colors.$primary;
-      border-color: rgba(colors.$text-color, 0.12);
-    }
   }
 }
 
