@@ -24,14 +24,20 @@ export type CommunityDefinition = {
   servers: ServerDefinition[];
 };
 
-export type Server = ServerDefinition & ServerLinks & {
-  community: string;
+export type Server = ServerDefinition & {
   id: number;
   country?: string;
 };
 
-export type ServerRegion = RegionDefinition & {
+export type ServerGroup = {
+  name: string;
+  links?: ServerLinks;
   servers: Server[];
+};
+
+export type ServerRegion = RegionDefinition & {
+  groups: ServerGroup[];
+  serverCount: number;
 };
 
 export type BattleMetricsMetadata = {

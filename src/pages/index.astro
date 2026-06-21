@@ -1,6 +1,8 @@
 ---
+import { Image } from "astro:assets";
 import ExternalLink from "../components/external_link.astro";
 import Layout from "../layouts/default.astro";
+import soldier from "../assets/vftf/transparent/soldier.svg";
 import socials from "../data/socials.yaml";
 ---
 
@@ -21,7 +23,14 @@ import socials from "../data/socials.yaml";
 
   <p>Get notifications for sessions on our Discord server and Steam group!</p>
 
-  <img src="/images/vftf/transparent/soldier.png" alt="Soldier">
+  <Image
+    src={soldier}
+    alt="Soldier"
+    width={256}
+    height={144}
+    loading="eager"
+    decoding="sync"
+  />
 
   <h1>Get Fragging</h1>
 

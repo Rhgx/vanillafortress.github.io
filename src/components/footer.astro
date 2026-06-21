@@ -1,22 +1,25 @@
 ---
 import ExternalLink from "./external_link.astro";
+import discordIcon from "../assets/icons/discord.svg?url";
+import githubIcon from "../assets/icons/github.svg?url";
+import steamIcon from "../assets/icons/steam.svg?url";
 import socials from "../data/socials.yaml";
 
 const socialLinks = [
   {
     href: socials.discord,
     label: "Discord",
-    icon: "/images/icons/discord.svg",
+    icon: discordIcon,
   },
   {
     href: socials.steam,
     label: "Steam",
-    icon: "/images/icons/steam.svg",
+    icon: steamIcon,
   },
   {
     href: socials.repo,
     label: "GitHub",
-    icon: "/images/icons/github.svg",
+    icon: githubIcon,
   },
 ];
 

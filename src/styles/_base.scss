@@ -39,27 +39,16 @@ h3 {
   text-transform: uppercase;
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1em 1.3em;
-}
-
-nav {
-  padding: 0.5em;
-  font-size: 16px;
-
-  > a {
-    font-weight: bold;
-  }
-}
-
 a {
-  color: colors.$secondary;
+  color: colors.$primary;
   text-decoration: none;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease;
 
-  &:hover {
-    color: colors.$primary;
+  &:hover,
+  &:focus-visible {
+    color: colors.$accent;
   }
 }

@@ -1,30 +1,23 @@
 ---
 import Layout from "../layouts/default.astro";
+import ExternalLink from "../components/external_link.astro";
 import ServerCard from "../components/server_card.astro";
-import { getServersByRegion } from "../data/servers";
+import discordIcon from "../assets/icons/discord.svg?url";
+import steamIcon from "../assets/icons/steam.svg?url";
+import { serverRegions } from "../data/servers";
+import clearIcon from "lucide-static/icons/x.svg?url";
+import websiteIcon from "lucide-static/icons/globe.svg?url";
 
-const euServers = getServersByRegion("eu");
-const naServers = getServersByRegion("na");
+const serverCount = serverRegions.reduce(
+  (total, region) => total + region.serverCount,
+  0,
+);
 
 ---
 
 <Layout
   title="Server List - VFTF"
   description="Vanilla Fortress Server List">
-
-<script is:inline src="/scripts/copy_ip.js"></script>
-<script is:inline>
-  // please do not ask why this is here instead of in a script file
-  // i simply ctrl+c ctrl+v'd this from battlemetrics
-  
-  window.addEventListener('message',function(e) {
-  if(e.data.uid && e.data.type === 'sizeUpdate') {
-    var i = document.querySelector('iframe[name="'+e.data.uid+'"]');
-    i.style.width = e.data.payload.width;
-    i.style.height = e.data.payload.height;
-  }
-  });
-</script>
 
 <div class="mid-align">
 
@@ -33,35 +26,525 @@ const naServers = getServersByRegion("na");
 
 </div>
 
-<div class="server-grid">
-
-  <div class="eu-servers">
-
-    <h2 class="mid-align">Europe</h2>
-
-    {euServers.map((server) => (
-
-      <ServerCard
-        server={server}
-        connect={`steam://connect/${server.ip}`}/>
-        
-    ))}
-
+<section class="server-directory-controls" aria-label="Server filters">
+  <div class="server-search">
+    <label for="server-search">Search servers</label>
+    <span class="server-search-field">
+      <input
+        id="server-search"
+        type="search"
+        placeholder="Name, IP, or region"
+        autocomplete="off"
+      />
+      <button
+        class="server-search-clear"
+        type="button"
+        aria-label="Clear server search"
+        hidden
+      >
+        <span style={`--icon: url("${clearIcon}")`} aria-hidden="true"></span>
+      </button>
+    </span>
   </div>
 
-  <div class="na-servers">
-    <h2 class="mid-align">North America</h2>
-
-    {naServers.map((server) => (
-
-      <ServerCard
-        server={server}
-        connect={`steam://connect/${server.ip}`}/>
-        
+  <div class="region-filter" role="group" aria-label="Region filter">
+    <button type="button" data-region-filter="all" aria-pressed="true">
+      All <span>{serverCount}</span>
+    </button>
+    {serverRegions.map((region) => (
+      <button type="button" data-region-filter={region.key} aria-pressed="false">
+        {region.label} <span>{region.serverCount}</span>
+      </button>
     ))}
-
   </div>
+</section>
 
-</div>
+<section class="server-directory" aria-label="Vanilla Fortress servers">
+  {serverRegions.map((region) => (
+    <section class="server-region" data-region-section={region.key}>
+      <div class="server-region-header">
+        <h2>{region.label}</h2>
+        <div class="server-region-stats">
+          <span>{region.serverCount} {region.serverCount === 1 ? "server" : "servers"}</span>
+          <span data-region-player-total>-- players</span>
+        </div>
+      </div>
+
+      <div class="server-groups">
+        {region.groups.map((group) => (
+          <section class="server-group" data-server-group>
+            <header class="server-group-header">
+              <h3>{group.name}</h3>
+              {group.links && (
+                <nav class="server-group-links" aria-label={`${group.name} links`}>
+                  {group.links.discord && (
+                    <ExternalLink
+                      href={group.links.discord}
+                      aria-label={`${group.name} Discord`}
+                      data-tooltip="Discord"
+                    >
+                      <span class="server-group-link-icon" style={`--icon: url("${discordIcon}")`} aria-hidden="true"></span>
+                    </ExternalLink>
+                  )}
+                  {group.links.website && (
+                    <ExternalLink
+                      href={group.links.website}
+                      aria-label={`${group.name} website`}
+                      data-tooltip="Website"
+                    >
+                      <span class="server-group-link-icon" style={`--icon: url("${websiteIcon}")`} aria-hidden="true"></span>
+                    </ExternalLink>
+                  )}
+                  {group.links.steam && (
+                    <ExternalLink
+                      href={group.links.steam}
+                      aria-label={`${group.name} Steam group`}
+                      data-tooltip="Steam Group"
+                    >
+                      <span class="server-group-link-icon" style={`--icon: url("${steamIcon}")`} aria-hidden="true"></span>
+                    </ExternalLink>
+                  )}
+                </nav>
+              )}
+            </header>
+            <div class="server-list">
+              {group.servers.map((server) => (
+                <ServerCard
+                  server={server}
+                  group={group.name}
+                  regionLabel={region.label}
+                />
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    </section>
+  ))}
+</section>
+
+<p class="server-empty" hidden>No servers match that search.</p>
+
+<script>
+  type BattleMetricsAttributes = {
+    country?: string;
+    details?: {
+      map?: string;
+    };
+    maxPlayers?: number;
+    name?: string;
+    players?: number;
+    rank?: number;
+    status?: string;
+  };
+
+  type BattleMetricsHistoryPoint = {
+    attributes?: {
+      value?: number;
+    };
+  };
+
+  type CachedServerStatus = {
+    attributes: BattleMetricsAttributes;
+    cachedAt: number;
+  };
+
+  type CachedServerHistory = {
+    points: number[];
+    cachedAt: number;
+  };
+
+  const statusCacheLifetime = 60_000;
+  const historyCacheLifetime = 10 * 60_000;
+  const battleMetricsRetryDelays = [300, 900];
+  const copyResetTimers = new WeakMap<HTMLButtonElement, number>();
+  const historyPoints = new WeakMap<HTMLElement, number[]>();
+
+  const setText = (card: HTMLElement, selector: string, value: string) => {
+    const target = card.querySelector(selector);
+    if (target) target.textContent = value;
+  };
+
+  const prepareGraph = (canvas: HTMLCanvasElement) => {
+    const rect = canvas.getBoundingClientRect();
+    const width = Math.max(160, Math.round(rect.width));
+    const height = Math.max(48, Math.round(rect.height));
+    const scale = Math.max(1, Math.min(window.devicePixelRatio || 1, 3));
+
+    canvas.width = Math.round(width * scale);
+    canvas.height = Math.round(height * scale);
+
+    const context = canvas.getContext("2d");
+    if (!context) return null;
+
+    context.setTransform(scale, 0, 0, scale, 0, 0);
+    context.clearRect(0, 0, width, height);
+    return { context, width, height };
+  };
+
+  const formatAxisLabel = (value: number) =>
+    String(Math.max(0, Math.round(value))).padStart(2, "0");
+
+  const getHistoryScale = (card: HTMLElement, points: number[]) => {
+    const capacity = Number(card.dataset.maxPlayers ?? 0);
+    const observedMaximum = Math.max(0, ...points);
+    const maximum = Math.max(1, capacity, observedMaximum);
+    const interval = Math.max(1, Math.round(maximum / 6));
+
+    return {
+      maximum,
+      lower: interval,
+      upper: Math.max(interval, maximum - interval),
+    };
+  };
+
+  const updateHistoryAxis = (
+    card: HTMLElement,
+    lower: number | null,
+    upper: number | null,
+  ) => {
+    setText(card, "[data-history-lower]", lower === null ? "--" : formatAxisLabel(lower));
+    setText(card, "[data-history-upper]", upper === null ? "--" : formatAxisLabel(upper));
+  };
+
+  const drawHistoryGrid = (
+    context: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    maximum: number,
+    lower: number,
+    upper: number,
+  ) => {
+    context.save();
+    context.strokeStyle = "rgba(145, 136, 112, 0.2)";
+    context.lineWidth = 1;
+
+    [lower, maximum / 2, upper].forEach((value) => {
+      const y = height - (value / maximum) * height;
+      context.beginPath();
+      context.moveTo(0, y);
+      context.lineTo(width, y);
+      context.stroke();
+    });
+
+    context.restore();
+  };
+
+  const renderHistory = (card: HTMLElement, points: number[]) => {
+    const canvas = card.querySelector("[data-history-graph]");
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+
+    historyPoints.set(card, points);
+    const graph = prepareGraph(canvas);
+    if (!graph) return;
+
+    const { context, width, height } = graph;
+    const ordered = points.length > 1 ? [...points].reverse() : [0, 0];
+    const { maximum, lower, upper } = getHistoryScale(card, ordered);
+    const inset = 3;
+
+    updateHistoryAxis(card, lower, upper);
+    drawHistoryGrid(context, width, height, maximum, lower, upper);
+
+    const graphColor = getComputedStyle(canvas)
+      .getPropertyValue("--history-graph-color")
+      .trim();
+
+    context.strokeStyle = graphColor || "#f0e62e";
+    context.lineWidth = 2.5;
+    context.lineCap = "round";
+    context.lineJoin = "round";
+    context.beginPath();
+
+    ordered.forEach((value, index) => {
+      const x = inset + (index / (ordered.length - 1)) * (width - inset * 2);
+      const y = height - inset - (value / maximum) * (height - inset * 2);
+
+      if (index === 0) context.moveTo(x, y);
+      else context.lineTo(x, y);
+    });
+
+    context.stroke();
+  };
+
+  const renderHistoryError = (card: HTMLElement) => {
+    const panel = card.querySelector("[data-history-panel]");
+    const canvas = card.querySelector("[data-history-graph]");
+    if (panel instanceof HTMLElement) panel.dataset.historyStatus = "unavailable";
+    updateHistoryAxis(card, null, null);
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+
+    const graph = prepareGraph(canvas);
+    if (!graph) return;
+
+    const { context, width, height } = graph;
+    context.strokeStyle = "rgba(253, 249, 205, 0.24)";
+    context.lineWidth = 2;
+    context.setLineDash([6, 6]);
+    context.beginPath();
+    context.moveTo(8, height / 2);
+    context.lineTo(width - 8, height / 2);
+    context.stroke();
+  };
+
+  const updateRegionPlayerTotal = (card: HTMLElement) => {
+    const region = card.closest("[data-region-section]");
+    if (!(region instanceof HTMLElement)) return;
+
+    const regionCards = Array.from(region.querySelectorAll<HTMLElement>(".server-card"));
+    const target = region.querySelector("[data-region-player-total]");
+    if (!target) return;
+
+    const loaded = regionCards.every((regionCard) => regionCard.dataset.playerStatus === "loaded");
+    const total = regionCards.reduce(
+      (sum, regionCard) => sum + Number(regionCard.dataset.currentPlayers ?? 0),
+      0,
+    );
+    target.textContent = loaded ? `${total} ${total === 1 ? "player" : "players"}` : "-- players";
+  };
+
+  const renderStatus = (card: HTMLElement, attributes: BattleMetricsAttributes) => {
+    const players = Number(attributes.players ?? 0);
+    const maxPlayers = Number(attributes.maxPlayers ?? 0);
+    const status = String(attributes.status ?? "unknown").toLowerCase();
+
+    card.dataset.status = status;
+    card.dataset.playerStatus = "loaded";
+    card.dataset.currentPlayers = String(players);
+    card.dataset.maxPlayers = String(maxPlayers);
+    setText(card, "[data-status-text]", status === "online" ? "Online" : status);
+    setText(card, "[data-player-current]", String(players));
+    setText(card, "[data-player-max]", maxPlayers ? String(maxPlayers) : "--");
+    setText(card, "[data-server-name]", attributes.name ?? "Unknown server");
+    setText(card, "[data-map]", attributes.details?.map ?? "Unknown map");
+
+    card.dataset.search = [
+      card.dataset.search,
+      attributes.name,
+      attributes.details?.map,
+      attributes.country,
+    ].filter(Boolean).join(" ").toLowerCase();
+
+    const country = (card.dataset.countryOverride ?? attributes.country)?.toLowerCase();
+    const flag = card.querySelector("[data-country-flag]");
+    if (country && /^[a-z]{2}$/.test(country) && flag instanceof HTMLElement) {
+      flag.style.backgroundImage = `url("https://flagcdn.com/${country}.svg")`;
+      flag.setAttribute("role", "img");
+      flag.setAttribute("aria-label", country.toUpperCase());
+      flag.removeAttribute("aria-hidden");
+    }
+
+    const points = historyPoints.get(card);
+    if (points) renderHistory(card, points);
+    updateRegionPlayerTotal(card);
+  };
+
+  const renderStatusError = (card: HTMLElement) => {
+    card.dataset.status = "unavailable";
+    card.dataset.playerStatus = "unavailable";
+    delete card.dataset.currentPlayers;
+    delete card.dataset.maxPlayers;
+    setText(card, "[data-status-text]", "Unavailable");
+    setText(card, "[data-player-current]", "--");
+    setText(card, "[data-player-max]", "--");
+    setText(card, "[data-map]", "");
+    updateRegionPlayerTotal(card);
+  };
+
+  const readCache = <Value,>(key: string, lifetime: number): Value | null => {
+    const cached = sessionStorage.getItem(key);
+    if (!cached) return null;
+
+    try {
+      const value = JSON.parse(cached) as Value & { cachedAt: number };
+      if (Date.now() - value.cachedAt < lifetime) return value;
+    } catch {
+      // Invalid cache entries are replaced by the next request.
+    }
+
+    sessionStorage.removeItem(key);
+    return null;
+  };
+
+  const fetchBattleMetrics = async (url: string) => {
+    const attemptCount = battleMetricsRetryDelays.length + 1;
+
+    for (let attempt = 0; attempt < attemptCount; attempt += 1) {
+      try {
+        const response = await fetch(url);
+        const shouldRetry = response.status === 429 || response.status >= 500;
+
+        if (!shouldRetry || attempt === attemptCount - 1) return response;
+      } catch (error) {
+        if (attempt === attemptCount - 1) throw error;
+      }
+
+      await new Promise((resolve) => {
+        window.setTimeout(resolve, battleMetricsRetryDelays[attempt]);
+      });
+    }
+
+    throw new Error("BattleMetrics request exhausted its retry attempts");
+  };
+
+  const loadServerStatus = async (card: HTMLElement) => {
+    const id = card.dataset.serverId;
+    if (!id) return renderStatusError(card);
+
+    const cacheKey = `vftf:battlemetrics:${id}`;
+    const cached = readCache<CachedServerStatus>(cacheKey, statusCacheLifetime);
+    if (cached) return renderStatus(card, cached.attributes);
+
+    try {
+      const response = await fetchBattleMetrics(`https://api.battlemetrics.com/servers/${id}`);
+      if (!response.ok) throw new Error(`BattleMetrics returned ${response.status}`);
+
+      const json = await response.json();
+      const attributes = json.data?.attributes as BattleMetricsAttributes | undefined;
+      if (!attributes) throw new Error("BattleMetrics response was missing attributes");
+
+      sessionStorage.setItem(cacheKey, JSON.stringify({ attributes, cachedAt: Date.now() }));
+      renderStatus(card, attributes);
+    } catch (error) {
+      console.error("Could not load BattleMetrics server status", error);
+      renderStatusError(card);
+    }
+  };
+
+  const loadServerHistory = async (card: HTMLElement) => {
+    const id = card.dataset.serverId;
+    if (!id) return renderHistoryError(card);
+
+    const cacheKey = `vftf:battlemetrics-history:${id}`;
+    const cached = readCache<CachedServerHistory>(cacheKey, historyCacheLifetime);
+    if (cached) return renderHistory(card, cached.points);
+
+    const start = new Date(Date.now() - 24 * 60 * 60_000).toISOString();
+    const stop = new Date().toISOString();
+
+    try {
+      const response = await fetchBattleMetrics(
+        `https://api.battlemetrics.com/servers/${id}/player-count-history?start=${encodeURIComponent(start)}&stop=${encodeURIComponent(stop)}`,
+      );
+      if (!response.ok) throw new Error(`BattleMetrics history returned ${response.status}`);
+
+      const json = await response.json();
+      const points = ((json.data ?? []) as BattleMetricsHistoryPoint[])
+        .map((point) => Number(point.attributes?.value ?? 0))
+        .filter(Number.isFinite);
+
+      sessionStorage.setItem(cacheKey, JSON.stringify({ points, cachedAt: Date.now() }));
+      renderHistory(card, points);
+    } catch (error) {
+      console.error("Could not load BattleMetrics player history", error);
+      renderHistoryError(card);
+    }
+  };
+
+  document.querySelectorAll(".copy-ip").forEach((element) => {
+    if (!(element instanceof HTMLButtonElement)) return;
+
+    element.addEventListener("click", async () => {
+      const ip = element.dataset.copy;
+      if (!ip) return;
+
+      try {
+        await navigator.clipboard.writeText(`connect ${ip}`);
+        const label = element.querySelector("[data-copy-label]");
+        const pendingReset = copyResetTimers.get(element);
+        if (pendingReset !== undefined) window.clearTimeout(pendingReset);
+
+        if (label) label.textContent = "Copied";
+        const resetTimer = window.setTimeout(() => {
+          if (label) label.textContent = "Copy IP";
+          copyResetTimers.delete(element);
+        }, 1000);
+        copyResetTimers.set(element, resetTimer);
+      } catch (error) {
+        console.error("Could not copy server IP", error);
+      }
+    });
+  });
+
+  const cards = Array.from(document.querySelectorAll<HTMLElement>(".server-card"));
+  const serverGroups = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-server-group]"),
+  );
+  const regionSections = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-region-section]"),
+  );
+  const filterButtons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>("[data-region-filter]"),
+  );
+  const searchInput = document.querySelector("#server-search");
+  const searchClear = document.querySelector(".server-search-clear");
+  const emptyState = document.querySelector(".server-empty");
+  let activeRegion = "all";
+
+  const applyServerFilters = () => {
+    const query = searchInput instanceof HTMLInputElement
+      ? searchInput.value.trim().toLowerCase()
+      : "";
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const regionMatches = activeRegion === "all" || card.dataset.region === activeRegion;
+      const searchMatches = !query || (card.dataset.search ?? "").includes(query);
+      card.hidden = !(regionMatches && searchMatches);
+      if (!card.hidden) visibleCount += 1;
+    });
+
+    serverGroups.forEach((group) => {
+      group.hidden = !group.querySelector(".server-card:not([hidden])");
+    });
+
+    regionSections.forEach((section) => {
+      section.hidden = !section.querySelector(".server-card:not([hidden])");
+    });
+
+    if (searchClear instanceof HTMLButtonElement) searchClear.hidden = !query;
+    if (emptyState instanceof HTMLElement) emptyState.hidden = visibleCount > 0;
+  };
+
+  if (searchInput instanceof HTMLInputElement) {
+    searchInput.addEventListener("input", applyServerFilters);
+  }
+
+  if (searchInput instanceof HTMLInputElement && searchClear instanceof HTMLButtonElement) {
+    searchClear.addEventListener("click", () => {
+      searchInput.value = "";
+      searchInput.focus();
+      applyServerFilters();
+    });
+  }
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      activeRegion = button.dataset.regionFilter ?? "all";
+      filterButtons.forEach((candidate) => {
+        candidate.setAttribute("aria-pressed", String(candidate === button));
+      });
+      applyServerFilters();
+    });
+  });
+
+  cards.forEach((element) => {
+    void loadServerStatus(element);
+    void loadServerHistory(element);
+  });
+
+  const graphResizeObserver = new ResizeObserver((entries) => {
+    entries.forEach((entry) => {
+      const card = entry.target.closest(".server-card");
+      if (!(card instanceof HTMLElement)) return;
+      const points = historyPoints.get(card);
+      if (points) renderHistory(card, points);
+    });
+  });
+
+  document.querySelectorAll("[data-history-graph]").forEach((canvas) => {
+    graphResizeObserver.observe(canvas);
+  });
+</script>
 
 </Layout>

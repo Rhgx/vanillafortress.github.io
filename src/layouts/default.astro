@@ -2,6 +2,7 @@
 import "../styles/style.scss";
 import Header from "../components/header.astro";
 import Footer from "../components/footer.astro";
+import socialLogo from "../assets/vftf/logo.png";
 
 type Props = {
   title: string;
@@ -18,7 +19,7 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const socialImageUrl = new URL("/images/vftf/logo.png", Astro.site);
+const socialImageUrl = new URL(socialLogo.src, Astro.site);
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebPage",

@@ -1,19 +1,41 @@
 ---
+import { Image } from "astro:assets";
+import logo from "../assets/vftf/transparent/logo.png";
+
+const currentPath = Astro.url.pathname;
+const navigation = [
+  { href: "/", label: "Home" },
+  { href: "/about/", label: "About" },
+  { href: "/servers/", label: "Server List" },
+];
+
+const isCurrentPage = (href: string) =>
+  href === "/" ? currentPath === href : currentPath.startsWith(href);
 ---
 
-<header>
+<header class="site-header">
 
-  <a href="/" class="left-align">
-  <img
-    src="/images/vftf/transparent/logo.png"
-    class="logo"
-    alt="VFTF">
+  <a href="/" class="brand" aria-label="Vanilla Fortress home">
+    <Image
+      src={logo}
+      class="logo"
+      alt=""
+      width={80}
+      height={80}
+      loading="eager"
+      decoding="async"
+    />
   </a>
 
-  <nav class="right-align">
-    <a href="/">Home</a>
-    <a href="/about">About</a>
-    <a href="/servers">Server List</a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    {navigation.map((item) => (
+      <a
+        href={item.href}
+        aria-current={isCurrentPage(item.href) ? "page" : undefined}
+      >
+        {item.label}
+      </a>
+    ))}
   </nav>
 
 </header>
