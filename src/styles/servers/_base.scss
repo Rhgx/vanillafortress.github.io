@@ -1,0 +1,12 @@
+@use '../colors';
+
+.server-directory,
+.server-directory *,
+.server-directory-controls,
+.server-directory-controls * {
+  box-sizing: border-box;
+}
+
+.server-directory {
+  --history-graph-color: #{colors.$accent};
+}

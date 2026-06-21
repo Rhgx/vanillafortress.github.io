@@ -1,0 +1,346 @@
+@use 'sass:color';
+@use '../colors';
+@use '../fonts';
+
+// Individual server rows
+
+.server-card {
+  min-width: 0;
+  background: colors.$surface-card;
+  transition: opacity 140ms ease, background-color 140ms ease;
+
+  &:hover,
+  &:focus-within {
+    background: colors.$surface-card-hover;
+    opacity: 1;
+  }
+
+  &[data-status="offline"],
+  &[data-status="unavailable"] {
+    opacity: 0.55;
+  }
+}
+
+.server-card-content {
+  min-width: 0;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.72rem 0.75rem 0.6rem;
+  font-family: fonts.$tf2-secondary;
+}
+
+.server-primary-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1.5rem auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.45rem;
+  color: colors.$text-soft;
+  font: 700 1rem/1.15 fonts.$ubuntu;
+}
+
+.country-flag {
+  width: 1.5rem;
+  height: 1.05rem;
+  display: block;
+  background-position: center;
+  background-size: cover;
+  border-radius: 1px;
+}
+
+.server-player-count {
+  display: inline-flex;
+  align-items: baseline;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.server-player-current {
+  color: inherit;
+  transition: color 140ms ease;
+}
+
+.server-card[data-current-players="0"] .server-player-current {
+  color: colors.$text-muted;
+}
+
+.server-live-name {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.server-map {
+  min-width: 0;
+  min-height: 1em;
+  padding-left: 1.95rem;
+  overflow: hidden;
+  color: colors.$text-muted;
+  font: 400 0.9rem/1.05 fonts.$tf2-secondary;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.server-lower {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 6.85rem;
+  gap: 0.7rem;
+}
+
+.server-data {
+  min-width: 0;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.history-panel {
+  min-width: 0;
+  height: 5.4rem;
+  display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0.2rem;
+}
+
+.history-axis {
+  position: relative;
+  color: colors.$text-quiet;
+  font: 400 0.9rem/1 fonts.$tf2-secondary;
+
+  > span {
+    position: absolute;
+    right: 0;
+  }
+
+  > [data-history-upper] {
+    top: 16.666%;
+    transform: translateY(-50%);
+  }
+
+  > [data-history-lower] {
+    bottom: 16.666%;
+    transform: translateY(50%);
+  }
+}
+
+.history-graph {
+  width: 100%;
+  height: 5.4rem;
+  display: block;
+  background: colors.$surface-inset;
+  border: 0;
+  border-radius: 3px;
+}
+
+.history-panel[data-history-status="unavailable"] .history-graph {
+  background: rgba(colors.$surface-deep, 0.16);
+}
+
+.server-meta-row {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  color: colors.$text-quiet;
+  font: 400 0.9rem/1 fonts.$tf2-secondary;
+}
+
+.server-connection-meta {
+  min-width: 0;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.status-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: colors.$text-muted;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.status-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  flex: 0 0 auto;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.server-card[data-status="online"] .status-head {
+  color: colors.$status-online;
+}
+
+.server-card[data-status="offline"] .status-head {
+  color: colors.$status-offline;
+}
+
+.server-address {
+  min-width: 0;
+  overflow: hidden;
+  color: colors.$text-muted;
+  font: 400 0.9rem/1 fonts.$tf2-secondary;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+}
+
+.server-meta-separator {
+  flex: 0 0 auto;
+  color: colors.$text-muted;
+}
+
+.history-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: colors.$text-quiet;
+  white-space: nowrap;
+}
+
+.history-arrow {
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: 0 0 auto;
+  background: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+.server-actions {
+  height: 5.4rem;
+  align-self: start;
+  display: grid;
+  grid-template-rows: repeat(2, 2.5rem);
+  align-content: center;
+  gap: 0.3rem;
+
+  > a,
+  > button {
+    width: 100%;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font: 500 1rem/1 fonts.$ubuntu;
+    transition:
+      color 140ms ease,
+      background-color 140ms ease,
+      border-color 140ms ease;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
+    }
+  }
+
+  > button {
+    cursor: pointer;
+  }
+}
+
+.server-actions > .server-connect {
+  color: colors.$text-soft;
+  background: colors.$border-muted;
+  border-color: rgba(colors.$text-soft, 0.14);
+}
+
+.server-card:hover .server-actions > .server-connect,
+.server-card:focus-within .server-actions > .server-connect {
+  color: colors.$text-color;
+  background: colors.$primary;
+  border-color: color.adjust(colors.$primary, $lightness: -25%);
+}
+
+.server-actions > .server-connect:hover,
+.server-actions > .server-connect:focus-visible {
+  color: colors.$text-color;
+  background: color.adjust(colors.$primary, $lightness: 6%);
+  border-color: color.adjust(colors.$primary, $lightness: -20%);
+}
+
+.server-actions .copy-ip {
+  color: colors.$text-soft;
+  background: transparent;
+  border-color: colors.$border-muted;
+  box-shadow: none;
+
+  &:hover,
+  &:focus-visible {
+    color: colors.$text-color;
+    background: rgba(colors.$text-soft, 0.07);
+    border-color: rgba(colors.$text-soft, 0.24);
+  }
+}
+
+.server-action-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: 0 0 auto;
+  background: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+.server-group[hidden],
+.server-card[hidden],
+.server-region[hidden],
+.server-empty[hidden],
+.server-search-clear[hidden] {
+  display: none;
+}
+
+.server-empty {
+  margin-top: 1.5rem;
+  padding: 1.4rem;
+  color: colors.$text-muted;
+  background: colors.$surface-deep;
+  border: 1px solid colors.$border-muted;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 700;
+}
+
+@media (max-width: 520px) {
+  .server-meta-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .server-connection-meta {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 390px) {
+  .server-lower {
+    grid-template-columns: 1fr;
+  }
+
+  .server-actions {
+    height: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 1.9rem;
+    padding: 0;
+  }
+
+  .server-actions > a,
+  .server-actions > button {
+    height: 1.9rem;
+  }
+}
