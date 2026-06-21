@@ -27,4 +27,4 @@ jobs:
       uses: vkirilichev/changed-lines-count-labeler@v0.2
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        configuration-path: .github/pr-size-labeller.yml
+        configuration-path: .github/pr-size-labeler.yml

@@ -1,6 +1,6 @@
 # Vanilla Fortress
 
-[![Deployment status](https://img.shields.io/github/actions/workflow/status/vanillafortress/vanillafortress.github.io/deploy.yml?branch=main&style=for-the-badge&labelColor=black&color=white)](https://github.com/vanillafortress/vanillafortress.github.io/actions/workflows/deploy.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/vanillafortress/vanillafortress.github.io/deploy.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=%23fdf9cd&labelColor=%23f5722c&color=%23fdf9cd)
 
 The official website for Vanilla Fortress, a community hub for finding and
 seeding vanilla Team Fortress 2 servers running the classic Quickplay ruleset.
