@@ -1,6 +1,10 @@
+// IMPORTS
+
 @use './colors';
 
-// Page introduction
+// RULES
+
+// > Page introduction
 
 .page-intro {
   display: grid;
@@ -8,10 +12,9 @@
   gap: 1rem;
   margin: 0 auto 2.625rem;
   text-align: center;
-
 }
 
-// Frequently asked questions
+// > FAQ
 
 .faq-list {
   max-width: 50rem;

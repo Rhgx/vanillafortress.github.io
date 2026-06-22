@@ -4,11 +4,21 @@
 @use './colors';
 @use './fonts';
 
-// CLASSES
+// RULES
 
 .logo {
   height: 80px;
   width: 80px;
+}
+
+.page-lead {
+  max-width: 45rem;
+  margin: 0 auto;
+  color: colors.$text-color;
+  font-family: fonts.$nunito;
+  font-size: clamp(1.05rem, 1.5vw, 1.18rem);
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .brand {
@@ -70,16 +80,8 @@
   }
 }
 
-.left-align {
-  text-align: left;
-}
-
 .mid-align {
   text-align: center;
-}
-
-.right-align {
-  text-align: right;
 }
 
 .visually-hidden {

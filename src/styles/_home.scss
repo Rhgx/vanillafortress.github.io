@@ -1,6 +1,10 @@
+// IMPORTS
+
 @use './colors';
 
-// Home splash
+// RULES
+
+// > Home splash
 
 .home-splash {
   min-height: 18.75rem;
@@ -26,14 +30,15 @@
   }
 }
 
-.home-soldier {
+.home-soldier,
+.home-spy {
   width: min(14.375rem, 46vw);
   height: auto;
   margin-top: 0.75rem;
   filter: drop-shadow(0 0.875rem 0.75rem rgba(0, 0, 0, 0.28));
 }
 
-// Community call to action
+// > Community call to action
 
 .rally-section {
   display: grid;
@@ -52,7 +57,8 @@
     padding-top: 1.125rem;
   }
 
-  .home-soldier {
+  .home-soldier,
+  .home-spy {
     width: min(13.125rem, 62vw);
   }
 
