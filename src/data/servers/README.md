@@ -3,11 +3,33 @@
 The server directory is defined in TypeScript under
 [`communities`](./communities). BattleMetrics IDs and countries are resolved
 automatically from each server address during development and builds.
+Community files are loaded automatically and displayed alphabetically by
+community name.
 
 Do not edit [`generated/battlemetrics.json`](./generated/battlemetrics.json) by
 hand.
 
+## Assisted workflow
+
+Run the helper to add a community or append servers to an existing community:
+
+```sh
+npm run add:server
+```
+
+The helper validates the community name, links, region, address format, and port
+range before writing changes. After it updates the server directory, resolve the
+BattleMetrics metadata and verify the site:
+
+```sh
+npm run resolve:servers
+npm run check
+npm run build
+```
+
 ## Add a server to an existing community
+
+You can also edit the TypeScript files manually.
 
 1. Open the community's file in [`communities`](./communities).
 2. Add the server to its `servers` array:
@@ -55,10 +77,6 @@ export default {
 
 All links are optional. Remove the `links` object or any unused entries rather
 than leaving empty strings.
-
-Import the new definition in [`communities/index.ts`](./communities/index.ts)
-and add it to the `communities` array. Its position in that array controls its
-display order within each region.
 
 Then run:
 

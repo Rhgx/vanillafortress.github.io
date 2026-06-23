@@ -1,10 +1,11 @@
 import { lookup } from "node:dns/promises";
-import { readFile, writeFile } from "node:fs/promises";
+import { readdir, readFile, writeFile } from "node:fs/promises";
 import { isIP } from "node:net";
 import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import { serverDefinitions } from "../src/data/servers/definitions";
-import type { BattleMetricsCache, BattleMetricsMetadata } from "../src/data/servers/core/types";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { validateServerDirectory } from "../src/data/servers/core/validate";
+import { regions } from "../src/data/servers/regions";
+import type { BattleMetricsCache, BattleMetricsMetadata, CommunityDefinition } from "../src/data/servers/core/types";
 
 type ResolvedServer = {
   name: string;
@@ -26,6 +27,7 @@ type BattleMetricsResponse = {
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cachePath = resolve(root, "src/data/servers/generated/battlemetrics.json");
+const communitiesPath = resolve(root, "src/data/servers/communities");
 const userAgent = "VanillaFortressBattleMetricsResolver/1.0";
 const refresh = process.argv.includes("--refresh");
 
@@ -61,7 +63,28 @@ const parseAddress = (address: string) => {
   return { host, port };
 };
 
-const readServers = (): ResolvedServer[] =>
+const readCommunityDefinitions = async () => {
+  const files = (await readdir(communitiesPath))
+    .filter((file) => file.endsWith(".ts") && file !== "index.ts")
+    .sort((left, right) => left.localeCompare(right, "en"));
+
+  const communities = await Promise.all(
+    files.map(async (file) => {
+      const module = await import(pathToFileURL(resolve(communitiesPath, file)).href) as {
+        default: CommunityDefinition;
+      };
+
+      return module.default;
+    }),
+  );
+
+  return validateServerDirectory(
+    communities.sort((left, right) => left.name.localeCompare(right.name)),
+    regions,
+  );
+};
+
+const readServers = (serverDefinitions: readonly CommunityDefinition[]): ResolvedServer[] =>
   serverDefinitions.flatMap((community) =>
     community.servers.map((server) => ({
       name: `${community.name} > ${server.name}`,
@@ -123,7 +146,8 @@ const sortMetadata = (metadata: BattleMetricsCache): BattleMetricsCache =>
   Object.fromEntries(Object.entries(metadata).sort(([left], [right]) => left.localeCompare(right, "en")));
 
 const main = async () => {
-  const servers = readServers();
+  const serverDefinitions = await readCommunityDefinitions();
+  const servers = readServers(serverDefinitions);
   const cachedValues = await readCache();
   const resolvedMetadata: BattleMetricsCache = {};
   const unresolved: string[] = [];

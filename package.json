@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "prebuild": "npm run resolve:servers",
+    "add:server": "tsx scripts/add-server.ts",
     "resolve:servers": "tsx scripts/resolve-battlemetrics-ids.ts",
     "check": "astro check",
     "build": "astro build",

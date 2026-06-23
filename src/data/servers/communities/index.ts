@@ -1,18 +1,10 @@
-import agartha from "./agartha";
-import bbqParty from "./bbq-party";
-import fightClubNight from "./fight-club-night";
-import pipeline from "./pipeline";
-import teepawtz from "./teepawtz";
-import tf2Warhouse from "./tf2-warhouse";
-import zestys from "./zestys";
 import type { CommunityDefinition } from "../core/types";
 
-export const communities = [
-  bbqParty,
-  pipeline,
-  zestys,
-  agartha,
-  teepawtz,
-  fightClubNight,
-  tf2Warhouse,
-] satisfies CommunityDefinition[];
+const modules = import.meta.glob<{ default: CommunityDefinition }>("./*.ts", {
+  eager: true,
+});
+
+export const communities = Object.entries(modules)
+  .filter(([path]) => !path.endsWith("/index.ts"))
+  .map(([, module]) => module.default)
+  .sort((a, b) => a.name.localeCompare(b.name)) satisfies CommunityDefinition[];
