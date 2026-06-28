@@ -1,6 +1,7 @@
 // IMPORTS
 
 @use './colors';
+@use './fonts';
 
 // RULES
 
@@ -52,6 +53,51 @@
   }
 }
 
+.quickplay-button {
+  display: inline-grid;
+  place-items: center;
+  width: min(14.75rem, calc(100vw - 2rem));
+  min-height: clamp(2.4rem, 4.5vw, 2.875rem);
+  padding: 0.5rem 1.75rem 0.56rem;
+  border: 0;
+  border-radius: 0.25rem;
+  background:
+    radial-gradient(100% 74% at 50% 0%, rgba(255, 252, 224, 0.54), transparent 54%),
+    linear-gradient(180deg, #f0e8cc 0%, #d8cdb0 52%, #b6aa8c 100%);
+  box-shadow:
+    inset 0 0.125rem 0.125rem rgba(255, 255, 255, 0.78),
+    inset 0 0 0.5rem rgba(255, 246, 204, 0.44),
+    inset 0 -0.25rem 0.375rem rgba(68, 58, 43, 0.32),
+    inset 0 0 0 0.0625rem rgba(255, 250, 221, 0.42),
+    0 0.0625rem 0.125rem rgba(0, 0, 0, 0.4);
+  color: colors.$secondary-bg;
+  font-family: fonts.$tf2-build;
+  font-size: clamp(1.45rem, 2.65vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 0.0625rem 0 rgba(255, 255, 255, 0.24);
+  transition:
+    background 120ms ease,
+    filter 120ms ease;
+
+  &:hover,
+  &:focus-visible {
+    background:
+      radial-gradient(100% 74% at 50% 0%, rgba(255, 255, 234, 0.66), transparent 54%),
+      linear-gradient(180deg, #fff7d8 0%, #e7dbba 52%, #c5b796 100%);
+    color: colors.$secondary-bg;
+    filter: brightness(1.06);
+  }
+
+  &:focus-visible {
+    outline: 0.1875rem solid colors.$primary;
+    outline-offset: 0.25rem;
+  }
+}
+
 @media (max-width: 520px) {
   .home-splash {
     padding-top: 1.125rem;
@@ -64,5 +110,10 @@
 
   .rally-section .links > a {
     flex: 0 1 auto;
+  }
+
+  .quickplay-button {
+    width: min(13.25rem, calc(100vw - 2rem));
+    min-height: 2.5rem;
   }
 }
